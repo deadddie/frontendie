@@ -1,0 +1,37 @@
+{
+  "name": "sitename",
+  "version": "0.0.1",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deadddie/deadie-frontend"
+},
+  "author": "deadie (http://vk.com/deadie)",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-connect": "latest",
+    "gulp-htmlmin": "latest",
+    "gulp-jsbeautifier": "latest",
+    "gulp-imagemin": "latest",
+    "gulp-jshint": "latest",
+    "gulp-minify-css": "latest",
+    "gulp-plumber": "latest",
+    "gulp-rename": "latest",
+    "gulp-rigger": "latest",
+    "gulp-sass": "latest",
+    "gulp-scss": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-uglify": "latest",
+    "gulp-watch": "latest",
+    "gulp.spritesmith": "latest",
+    "jshint": "latest",
+    "jshint-stylish": "latest",
+    "rimraf": "latest"
+  }
+}

@@ -1,0 +1,8 @@
+/.gulp-scss-cache/
+/node_modules/
+/build/
+/resource/
+/src/supply/yandex*.html
+/src/supply/google*.html
+/src/supply/bing*.html
+*.sublime-*
