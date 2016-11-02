@@ -1,4 +1,4 @@
-# deadie's Gulp Frontend Starter pack
+# [frontendie] - deadie's Gulp Frontend Starter pack
 
 Стартовая заготовка для фронтенда
 
