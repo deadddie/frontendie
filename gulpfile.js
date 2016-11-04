@@ -3,9 +3,10 @@
 var gulp = require('gulp'), //основной плагин gulp
     sass = require('gulp-sass'), //препроцессор sass/scss
     prefixer = require('gulp-autoprefixer'), //расставление автопрефиксов
-    cssmin = require('gulp-minify-css'), //минификация css
+    cleancss = require('gulp-clean-css'), //минификация css
     uglify = require('gulp-uglify'), //минификация js
-    jshint = require("gulp-jshint"), //отслеживание ошибкок в js
+    jshint = require('gulp-jshint'), //отслеживание ошибкок в js
+    jade = require('gulp-jade'),
     rigger = require('gulp-rigger'), //работа с инклюдами в html и js
     htmlmin = require('gulp-htmlmin'), //минификация html
     prettify = require('gulp-jsbeautifier'), //бьютифайер
@@ -13,8 +14,8 @@ var gulp = require('gulp'), //основной плагин gulp
     //spritesmith = require("gulp.spritesmith"), //объединение картинок в спрайты
     rimraf = require('rimraf'), //очистка
     sourcemaps = require('gulp-sourcemaps'), //sourcemaps
-    rename = require("gulp-rename"), //переименование файлов
-    plumber = require("gulp-plumber"), //предохранитель для остановки гальпа
+    rename = require('gulp-rename'), //переименование файлов
+    plumber = require('gulp-plumber'), //предохранитель для остановки гальпа
     watch = require('gulp-watch'), //расширение возможностей watch
     connect = require('gulp-connect'); //livereload
 
@@ -33,12 +34,13 @@ var path = {
         spritesCss: 'src/css/partial/'
     },
     src: { //Пути откуда брать исходники
-        html: 'src/*.html', //Синтаксис src/template/*.html говорит gulp что мы хотим взять все файлы с расширением .html
+        html: 'src/*.html', //Взять все файлы с расширением .html
+        jade: 'src/*.jade', //Взять все файлы с расширением .jade
         jsVendor: 'src/js/vendor/*.*',
         js: 'src/js/[^_]*.js',//В стилях и скриптах нам понадобятся только main файлы
         jshint: 'src/js/*.js',
         css: 'src/css/styles.scss',
-        //cssVendor: 'src/css/vendor/*.*', //Если мы хотим файлы библиотек отдельно хранить то раскоментить строчку
+        cssVendor: 'src/css/vendor/*.*', //Если мы хотим файлы библиотек отдельно хранить то раскоментить строчку
         img: 'src/css/images/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
         imgIcons: 'src/icons/*.*',
         fonts: 'src/fonts/**/*.*',
@@ -48,7 +50,8 @@ var path = {
         supply: 'src/supply/*.*' //Дополнительные файлы: favicon.ico, robots.txt, sitemap.xml...
     },
     watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
-        html: 'src/**/*.html',
+        html: 'src/*.html',
+        jade: 'src/*.jade',
         js: 'src/js/**/*.js',
         css: 'src/css/**/*.*',
         imgIcons: 'src/icons/*.*',
@@ -74,8 +77,13 @@ gulp.task('connect', function(){
 // таск для билдинга html
 gulp.task('html:build', function () {
     gulp.src(path.src.html) //Выберем файлы по нужному пути
-        //.pipe(rigger()) //Прогоним через rigger
-        .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование (отключить, если включено сжатие)
+        .pipe(rigger()) //Прогоним через rigger
+        .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование
+        .pipe(gulp.dest(path.build.html)) //выгрузим их в папку build
+        .pipe(connect.reload()) //И перезагрузим наш сервер для обновлений
+    gulp.src(path.src.jade) //Выберем файлы по нужному пути
+        .pipe(jade()) //Создадим html из jade
+        .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование
         .pipe(gulp.dest(path.build.html)) //выгрузим их в папку build
         .pipe(connect.reload()) //И перезагрузим наш сервер для обновлений
 });
@@ -84,7 +92,13 @@ gulp.task('html:build', function () {
 gulp.task('htmlProd:build', function () {
     gulp.src(path.src.html) //Выберем файлы по нужному пути
         .pipe(rigger()) //Прогоним через rigger
-        .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование (отключить, если включено сжатие)
+        .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование
+        //.pipe(htmlmin({collapseWhitespace: true})) //Сожмем (закомментируйте, если не нужно сжимать html)
+        .pipe(gulp.dest(path.build.html)) //выгрузим их в папку build
+        .pipe(connect.reload()) //И перезагрузим наш сервер для обновлений
+    gulp.src(path.src.html) //Выберем файлы по нужному пути
+        .pipe(jade()) //Создадим html из jade
+        .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование
         //.pipe(htmlmin({collapseWhitespace: true})) //Сожмем (закомментируйте, если не нужно сжимать html)
         .pipe(gulp.dest(path.build.html)) //выгрузим их в папку build
         .pipe(connect.reload()) //И перезагрузим наш сервер для обновлений
@@ -186,7 +200,7 @@ gulp.task('cssOwn:build', function () {
         .pipe(prefixer({
             browser: ['last 3 version', "> 1%", "ie 8", "ie 7"]
         })) //Добавим вендорные префиксы
-        .pipe(cssmin()) //Сожмем
+        .pipe(cleancss({compatibility: 'ie8'})) //Сожмем
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
         .pipe(rename({suffix: '.min'})) //добавим суффикс .min к имени выходного файла
         .pipe(gulp.dest(path.build.css)) //вызгрузим в build
@@ -197,7 +211,7 @@ gulp.task('cssOwn:build', function () {
 gulp.task('cssVendor:build', function () {
     gulp.src(path.src.cssVendor) // Берем папку vendor
         .pipe(sourcemaps.init()) //инициализируем soucemap
-        .pipe(cssmin()) //Сожмем
+        .pipe(cleancss({compatibility: 'ie8'})) //Сожмем
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
         .pipe(gulp.dest(path.build.css)) //выгрузим в build
         .pipe(connect.reload()) //перезагрузим сервер
@@ -206,7 +220,7 @@ gulp.task('cssVendor:build', function () {
 // билдим css целиком
 gulp.task('css:build', [
     'cssOwn:build',
-    // 'cssVendor:build'
+    'cssVendor:build'
 ]);
 
 // билдим шрифты

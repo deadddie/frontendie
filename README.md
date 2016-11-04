@@ -7,8 +7,9 @@
 * gulp - собственно, сам gulp
 * gulp-sass - препроцессор sass/scss
 * gulp-autoprefixer - расставление автопрефиксов
-* gulp-minify-css - минификация css
+* gulp-clean-css - очистка и минификация css
 * gulp-uglify - минификация js
+* gulp-jade - шаблонизатор jade
 * gulp-jshint - отслеживание ошибкок в js
 * gulp-rigger - работа с инклюдами в html и js
 * gulp-htmlmin - минификация html
@@ -18,6 +19,6 @@
 * rimraf - очистка
 * gulp-sourcemaps - sourcemaps
 * gulp-rename - переименование файлов
-* gulp-plumber - предохранитель для остановки гальпа
+* gulp-plumber - предохранитель для остановки gulp
 * gulp-watch - расширение возможностей watch
 * gulp-connect - livereload
