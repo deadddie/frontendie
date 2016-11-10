@@ -23,6 +23,7 @@
     "gulp-imagemin": "latest",
     "gulp-jshint": "latest",
     "gulp-plumber": "latest",
+    "gulp-purifycss": "latest",
     "gulp-rename": "latest",
     "gulp-rigger": "latest",
     "gulp-sass": "latest",

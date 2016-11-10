@@ -11,6 +11,7 @@
 * gulp-uglify - минификация js
 * gulp-jade - шаблонизатор jade
 * gulp-jshint - отслеживание ошибкок в js
+* gulp-purifycss - удаление дублей и неиспользуемых css-свойств
 * gulp-rigger - работа с инклюдами в html и js
 * gulp-htmlmin - минификация html
 * gulp-jsbeautifier - бьютифайер

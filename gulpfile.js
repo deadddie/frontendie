@@ -4,6 +4,7 @@ var gulp = require('gulp'), //основной плагин gulp
     sass = require('gulp-sass'), //препроцессор sass/scss
     prefixer = require('gulp-autoprefixer'), //расставление автопрефиксов
     cleancss = require('gulp-clean-css'), //минификация css
+    purify = require('gulp-purifycss'), //удаление дублей и неиспользуемых css-свойств
     uglify = require('gulp-uglify'), //минификация js
     jshint = require('gulp-jshint'), //отслеживание ошибкок в js
     jade = require('gulp-jade'),
@@ -197,6 +198,7 @@ gulp.task('cssOwn:build', function () {
             compress: true,
             'include css': true
         })) //Скомпилируем scss
+        .pipe(purify(['./'+path.build.html+'/**/*.html', './'+path.build.js+'/**/*.js'])) //оптимизируем css
         .pipe(prefixer({
             browser: ['last 3 version', "> 1%", "ie 8", "ie 7"]
         })) //Добавим вендорные префиксы
