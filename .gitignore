@@ -1,3 +1,4 @@
+/.idea/
 /.gulp-scss-cache/
 /node_modules/
 /build/
@@ -5,4 +6,5 @@
 /src/supply/yandex*.html
 /src/supply/google*.html
 /src/supply/bing*.html
-*.sublime-*
+src/css/vendor/
+src/js/vendor/
