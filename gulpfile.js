@@ -1,13 +1,10 @@
 'use strict';
 
 var gulp = require('gulp'), //основной плагин gulp
-    sass = require('gulp-sass'), //препроцессор sass/scss
-    prefixer = require('gulp-autoprefixer'), //расставление автопрефиксов
-    cleancss = require('gulp-clean-css'), //минификация css
     purify = require('gulp-purifycss'), //удаление дублей и неиспользуемых css-свойств
     uglify = require('gulp-uglify'), //минификация js
     jshint = require('gulp-jshint'), //отслеживание ошибкок в js
-    jade = require('gulp-jade'),
+    jade = require('gulp-jade'), //шаблониатор jade
     rigger = require('gulp-rigger'), //работа с инклюдами в html и js
     htmlmin = require('gulp-htmlmin'), //минификация html
     prettify = require('gulp-jsbeautifier'), //бьютифайер
@@ -18,7 +15,35 @@ var gulp = require('gulp'), //основной плагин gulp
     rename = require('gulp-rename'), //переименование файлов
     plumber = require('gulp-plumber'), //предохранитель для остановки гальпа
     watch = require('gulp-watch'), //расширение возможностей watch
-    connect = require('gulp-connect'); //livereload
+    connect = require('gulp-connect'), //livereload
+    postcss = require('gulp-postcss'), //postcss (ядро)
+    //precss = require('precss'), //использование sass-разметки в css
+    postcss_import = require('postcss-import'), //импорт файлов
+    postcss_nested = require('postcss-nested'), //раскрытие внутренних правил
+    postcss_mixins = require('postcss-mixins'), //миксины
+    postcss_simple_vars = require('postcss-simple-vars'), //переменные
+    postcss_colors = require('postcss-sass-colors'), //цвета как в sass
+    postcss_hexrgba = require('postcss-hexrgba'), //hex-rgba
+    cssnext = require('postcss-cssnext'), //autoprefixer и т.д.
+    cssnano = require('cssnano'); //сжимаем css
+
+// постпроцессоры для css
+var processors = [
+    postcss_import,
+    postcss_nested,
+    postcss_mixins,
+    postcss_simple_vars,
+    postcss_colors,
+    postcss_hexrgba,
+    cssnext,
+    cssnano
+];
+
+// постпроцессоры для вендорного css
+var processorsVendor = [
+    cssnext,
+    cssnano
+];
 
 var path = {
     build: { //Тут мы укажем куда складывать готовые после сборки файлы
@@ -40,7 +65,7 @@ var path = {
         jsVendor: 'src/js/vendor/*.*',
         js: 'src/js/[^_]*.js',//В стилях и скриптах нам понадобятся только main файлы
         jshint: 'src/js/*.js',
-        css: 'src/css/styles.scss',
+        css: 'src/css/styles.pcss',
         cssVendor: 'src/css/vendor/*.*', //Если мы хотим файлы библиотек отдельно хранить то раскоментить строчку
         img: 'src/css/images/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
         imgIcons: 'src/icons/*.*',
@@ -192,30 +217,23 @@ gulp.task('imagescontent:build', function() {
 
 // билдинг пользовательского css
 gulp.task('cssOwn:build', function () {
-    gulp.src(path.src.css) //Выберем наш основной файл стилей
+    gulp.src(path.src.css) //выберем наш основной файл стилей
         .pipe(plumber())
         .pipe(sourcemaps.init()) //инициализируем soucemap
-        .pipe(sass({
-            compress: true,
-            'include css': true
-        })) //Скомпилируем scss
+        .pipe(postcss(processors)) //обработаем postcss
         .pipe(purify(['./'+path.build.html+'/**/*.html', './'+path.build.js+'/**/*.js'])) //оптимизируем css
-        .pipe(prefixer({
-            browser: ['last 3 version', "> 1%", "ie 8", "ie 7"]
-        })) //Добавим вендорные префиксы
-        .pipe(cleancss({compatibility: 'ie8'})) //Сожмем
+        .pipe(rename({suffix: '.min', extname: ".css"})) //добавим суффикс .min к имени выходного файла
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
-        .pipe(rename({suffix: '.min'})) //добавим суффикс .min к имени выходного файла
         .pipe(gulp.dest(path.build.css)) //вызгрузим в build
         .pipe(connect.reload()); //перезагрузим сервер
 });
 
 // билдинг вендорного css
 gulp.task('cssVendor:build', function () {
-    gulp.src(path.src.cssVendor) // Берем папку vendor
+    gulp.src(path.src.cssVendor) // берем папку vendor
         .pipe(plumber())
         .pipe(sourcemaps.init()) //инициализируем soucemap
-        .pipe(cleancss({compatibility: 'ie8'})) //Сожмем
+        .pipe(postcss(processorsVendor)) //расставим префиксы и сожмем
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
         .pipe(gulp.dest(path.build.css)) //выгрузим в build
         .pipe(connect.reload()); //перезагрузим сервер

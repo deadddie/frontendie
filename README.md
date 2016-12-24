@@ -1,13 +1,10 @@
 # [frontendie] - deadie's Gulp Frontend Starter pack
 
-Стартовая заготовка для фронтенда
+Стартовая заготовка для фронтенда (v2.0)
 
 ### Плагины
 
 * gulp - собственно, сам gulp
-* gulp-sass - препроцессор sass/scss
-* gulp-autoprefixer - расставление автопрефиксов
-* gulp-clean-css - очистка и минификация css
 * gulp-uglify - минификация js
 * gulp-jade - шаблонизатор jade
 * gulp-jshint - отслеживание ошибкок в js
@@ -23,3 +20,16 @@
 * gulp-plumber - предохранитель для остановки gulp
 * gulp-watch - расширение возможностей watch
 * gulp-connect - livereload
+* gulp-postcss - PostCSS
+
+#### PostCSS-плагины
+
+* postcss-import - импорт файлов
+* postcss-nested - раскрытие внутренних правил
+* postcss-mixins - миксины
+* postcss-simple-vars - переменные
+* postcss-cssnext - префиксы
+* precss - использование sass-разметки в css
+* cssnano - минификация
+* postcss-sass-colors - поддержка цветов как в sass
+* postcss-hexrgba - hex в rgba

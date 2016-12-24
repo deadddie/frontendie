@@ -14,8 +14,6 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "latest",
-    "gulp-autoprefixer": "latest",
-    "gulp-clean-css": "latest",
     "gulp-connect": "latest",
     "gulp-htmlmin": "latest",
     "gulp-jade": "latest",
@@ -26,14 +24,22 @@
     "gulp-purifycss": "latest",
     "gulp-rename": "latest",
     "gulp-rigger": "latest",
-    "gulp-sass": "latest",
-    "gulp-scss": "latest",
     "gulp-sourcemaps": "latest",
     "gulp-uglify": "latest",
     "gulp-watch": "latest",
     "gulp.spritesmith": "latest",
     "jshint": "latest",
     "jshint-stylish": "latest",
-    "rimraf": "latest"
+    "rimraf": "latest",
+    "gulp-postcss": "latest",
+    "postcss-import": "latest",
+    "postcss-nested": "latest",
+    "postcss-mixins": "latest",
+    "postcss-simple-vars": "latest",
+    "postcss-cssnext": "latest",
+    "precss": "latest",
+    "cssnano": "latest",
+    "postcss-sass-colors": "latest",
+    "postcss-hexrgba": "latest"
   }
 }
