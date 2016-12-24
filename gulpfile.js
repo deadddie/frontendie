@@ -81,12 +81,12 @@ gulp.task('html:build', function () {
         .pipe(rigger()) //Прогоним через rigger
         .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование
         .pipe(gulp.dest(path.build.html)) //выгрузим их в папку build
-        .pipe(connect.reload()) //И перезагрузим наш сервер для обновлений
+        .pipe(connect.reload()); //И перезагрузим наш сервер для обновлений
     gulp.src(path.src.jade) //Выберем файлы по нужному пути
         .pipe(jade()) //Создадим html из jade
         .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование
         .pipe(gulp.dest(path.build.html)) //выгрузим их в папку build
-        .pipe(connect.reload()) //И перезагрузим наш сервер для обновлений
+        .pipe(connect.reload()); //И перезагрузим наш сервер для обновлений
 });
 
 // таск для билдинга html для продакшена
@@ -96,13 +96,13 @@ gulp.task('htmlProd:build', function () {
         .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование
         //.pipe(htmlmin({collapseWhitespace: true})) //Сожмем (закомментируйте, если не нужно сжимать html)
         .pipe(gulp.dest(path.build.html)) //выгрузим их в папку build
-        .pipe(connect.reload()) //И перезагрузим наш сервер для обновлений
+        .pipe(connect.reload()); //И перезагрузим наш сервер для обновлений
     gulp.src(path.src.html) //Выберем файлы по нужному пути
         .pipe(jade()) //Создадим html из jade
         .pipe(prettify({indent_size: 2})) //Сделаем красивое форматирование
         //.pipe(htmlmin({collapseWhitespace: true})) //Сожмем (закомментируйте, если не нужно сжимать html)
         .pipe(gulp.dest(path.build.html)) //выгрузим их в папку build
-        .pipe(connect.reload()) //И перезагрузим наш сервер для обновлений
+        .pipe(connect.reload()); //И перезагрузим наш сервер для обновлений
 });
 
 gulp.task('jshint:build', function() {
@@ -117,7 +117,7 @@ gulp.task('jsVendor:build', function () {
         .pipe(uglify()) //Сожмем
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest(path.build.js)) //выгрузим в build
-        .pipe(connect.reload()) //перезагрузим сервер
+        .pipe(connect.reload()); //перезагрузим сервер
 });
 
 // билдинг яваскрипта
@@ -129,7 +129,7 @@ gulp.task('js:build', function () {
         .pipe(sourcemaps.write('.')) //Пропишем карты
         .pipe(rename({suffix: '.min'})) //добавим суффикс .min к выходному файлу
         .pipe(gulp.dest(path.build.js)) //выгрузим готовый файл в build
-        .pipe(connect.reload()) //И перезагрузим сервер
+        .pipe(connect.reload()); //И перезагрузим сервер
 });
 
 // билдим спрайты
@@ -160,7 +160,7 @@ gulp.task('image:build', function () {
             optimizationLevel: 3 //степень сжатия от 0 до 7
         }))
         .pipe(gulp.dest(path.build.img)) //выгрузим в build
-        .pipe(connect.reload()) //перезагрузим сервер
+        .pipe(connect.reload()); //перезагрузим сервер
 });
 
 // билдим статичные изображения (иконки)
@@ -173,7 +173,7 @@ gulp.task('imageIcons:build', function () {
             optimizationLevel: 3 //степень сжатия от 0 до 7
         }))
         .pipe(gulp.dest(path.build.imgIcons)) //выгрузим в build
-        .pipe(connect.reload()) //перезагрузим сервер
+        .pipe(connect.reload()); //перезагрузим сервер
 });
 
 
@@ -187,12 +187,13 @@ gulp.task('imagescontent:build', function() {
             optimizationLevel: 3 //степень сжатия от 0 до 7
         }))
         .pipe(gulp.dest(path.build.contentImg)) //выгрузим в build
-        .pipe(connect.reload()) //перезагрузим сервер
+        .pipe(connect.reload()); //перезагрузим сервер
 });
 
 // билдинг пользовательского css
 gulp.task('cssOwn:build', function () {
     gulp.src(path.src.css) //Выберем наш основной файл стилей
+        .pipe(plumber())
         .pipe(sourcemaps.init()) //инициализируем soucemap
         .pipe(sass({
             compress: true,
@@ -206,17 +207,18 @@ gulp.task('cssOwn:build', function () {
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
         .pipe(rename({suffix: '.min'})) //добавим суффикс .min к имени выходного файла
         .pipe(gulp.dest(path.build.css)) //вызгрузим в build
-        .pipe(connect.reload()) //перезагрузим сервер
+        .pipe(connect.reload()); //перезагрузим сервер
 });
 
 // билдинг вендорного css
 gulp.task('cssVendor:build', function () {
     gulp.src(path.src.cssVendor) // Берем папку vendor
+        .pipe(plumber())
         .pipe(sourcemaps.init()) //инициализируем soucemap
         .pipe(cleancss({compatibility: 'ie8'})) //Сожмем
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
         .pipe(gulp.dest(path.build.css)) //выгрузим в build
-        .pipe(connect.reload()) //перезагрузим сервер
+        .pipe(connect.reload()); //перезагрузим сервер
 });
 
 // билдим css целиком
@@ -228,19 +230,19 @@ gulp.task('css:build', [
 // билдим шрифты
 gulp.task('fonts:build', function() {
     gulp.src(path.src.fonts)
-        .pipe(gulp.dest(path.build.fonts)) //выгружаем в build
+        .pipe(gulp.dest(path.build.fonts)); //выгружаем в build
 });
 
 // билдим htaccess
 gulp.task('htaccess:build', function() {
     gulp.src(path.src.htaccess)
-        .pipe(gulp.dest(path.build.htaccess)) //выгружаем в build
+        .pipe(gulp.dest(path.build.htaccess)); //выгружаем в build
 });
 
 // билдим дополнительные файлы
 gulp.task('supply:build', function() {
     gulp.src(path.src.supply)
-        .pipe(gulp.dest(path.build.supply)) //выгружаем в build
+        .pipe(gulp.dest(path.build.supply)); //выгружаем в build
 });
 
 // билдим все
