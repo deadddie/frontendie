@@ -16,6 +16,7 @@
 * gulp.spritesmith - объединение картинок в спрайты
 * rimraf - очистка
 * gulp-sourcemaps - sourcemaps
+* gulp-sass - поддержка sass/scss
 * gulp-rename - переименование файлов
 * gulp-plumber - предохранитель для остановки gulp
 * gulp-watch - расширение возможностей watch
@@ -24,12 +25,5 @@
 
 #### PostCSS-плагины
 
-* postcss-import - импорт файлов
-* postcss-nested - раскрытие внутренних правил
-* postcss-mixins - миксины
-* postcss-simple-vars - переменные
 * postcss-cssnext - префиксы
-* precss - использование sass-разметки в css
 * cssnano - минификация
-* postcss-sass-colors - поддержка цветов как в sass
-* postcss-hexrgba - hex в rgba
