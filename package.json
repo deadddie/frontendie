@@ -31,15 +31,9 @@
     "jshint": "latest",
     "jshint-stylish": "latest",
     "rimraf": "latest",
+    "gulp-sass": "latest",
     "gulp-postcss": "latest",
-    "postcss-import": "latest",
-    "postcss-nested": "latest",
-    "postcss-mixins": "latest",
-    "postcss-simple-vars": "latest",
     "postcss-cssnext": "latest",
-    "precss": "latest",
-    "cssnano": "latest",
-    "postcss-sass-colors": "latest",
-    "postcss-hexrgba": "latest"
+    "cssnano": "latest"
   }
 }

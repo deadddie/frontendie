@@ -2,6 +2,7 @@
 
 var gulp = require('gulp'), //основной плагин gulp
     purify = require('gulp-purifycss'), //удаление дублей и неиспользуемых css-свойств
+    sass = require('gulp-sass'), //sass
     uglify = require('gulp-uglify'), //минификация js
     jshint = require('gulp-jshint'), //отслеживание ошибкок в js
     jade = require('gulp-jade'), //шаблониатор jade
@@ -17,24 +18,11 @@ var gulp = require('gulp'), //основной плагин gulp
     watch = require('gulp-watch'), //расширение возможностей watch
     connect = require('gulp-connect'), //livereload
     postcss = require('gulp-postcss'), //postcss (ядро)
-    //precss = require('precss'), //использование sass-разметки в css
-    postcss_import = require('postcss-import'), //импорт файлов
-    postcss_nested = require('postcss-nested'), //раскрытие внутренних правил
-    postcss_mixins = require('postcss-mixins'), //миксины
-    postcss_simple_vars = require('postcss-simple-vars'), //переменные
-    postcss_colors = require('postcss-sass-colors'), //цвета как в sass
-    postcss_hexrgba = require('postcss-hexrgba'), //hex-rgba
     cssnext = require('postcss-cssnext'), //autoprefixer и т.д.
     cssnano = require('cssnano'); //сжимаем css
 
 // постпроцессоры для css
 var processors = [
-    postcss_import,
-    postcss_nested,
-    postcss_mixins,
-    postcss_simple_vars,
-    postcss_colors,
-    postcss_hexrgba,
     cssnext,
     cssnano
 ];
@@ -65,7 +53,7 @@ var path = {
         jsVendor: 'src/js/vendor/*.*',
         js: 'src/js/[^_]*.js',//В стилях и скриптах нам понадобятся только main файлы
         jshint: 'src/js/*.js',
-        css: 'src/css/styles.pcss',
+        css: 'src/css/styles.scss',
         cssVendor: 'src/css/vendor/*.*', //Если мы хотим файлы библиотек отдельно хранить то раскоментить строчку
         img: 'src/css/images/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
         imgIcons: 'src/icons/*.*',
@@ -220,6 +208,9 @@ gulp.task('cssOwn:build', function () {
     gulp.src(path.src.css) //выберем наш основной файл стилей
         .pipe(plumber())
         .pipe(sourcemaps.init()) //инициализируем soucemap
+        .pipe(sass({
+          'include css': true
+        })) //Скомпилируем scss
         .pipe(postcss(processors)) //обработаем postcss
         .pipe(purify(['./'+path.build.html+'/**/*.html', './'+path.build.js+'/**/*.js'])) //оптимизируем css
         .pipe(rename({suffix: '.min', extname: ".css"})) //добавим суффикс .min к имени выходного файла
@@ -233,6 +224,9 @@ gulp.task('cssVendor:build', function () {
     gulp.src(path.src.cssVendor) // берем папку vendor
         .pipe(plumber())
         .pipe(sourcemaps.init()) //инициализируем soucemap
+        .pipe(sass({
+          'include css': true
+        })) //Скомпилируем scss
         .pipe(postcss(processorsVendor)) //расставим префиксы и сожмем
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
         .pipe(gulp.dest(path.build.css)) //выгрузим в build
