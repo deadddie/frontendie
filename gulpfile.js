@@ -18,19 +18,17 @@ var gulp = require('gulp'), //основной плагин gulp
     watch = require('gulp-watch'), //расширение возможностей watch
     connect = require('gulp-connect'), //livereload
     postcss = require('gulp-postcss'), //postcss (ядро)
-    cssnext = require('postcss-cssnext'), //autoprefixer и т.д.
-    cssnano = require('cssnano'); //сжимаем css
+    cssnext = require('postcss-cssnext'), //autoprefixer и пр.
+    cssnano = require('gulp-cssnano'); //сжимаем css
 
 // постпроцессоры для css
 var processors = [
-    cssnext,
-    cssnano
+    cssnext
 ];
 
 // постпроцессоры для вендорного css
 var processorsVendor = [
-    cssnext,
-    cssnano
+    cssnext
 ];
 
 var path = {
@@ -213,6 +211,7 @@ gulp.task('cssOwn:build', function () {
         })) //Скомпилируем scss
         .pipe(postcss(processors)) //обработаем postcss
         .pipe(purify(['./'+path.build.html+'/**/*.html', './'+path.build.js+'/**/*.js'])) //оптимизируем css
+        .pipe(cssnano()) //сожмем
         .pipe(rename({suffix: '.min', extname: ".css"})) //добавим суффикс .min к имени выходного файла
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
         .pipe(gulp.dest(path.build.css)) //вызгрузим в build
@@ -227,7 +226,8 @@ gulp.task('cssVendor:build', function () {
         .pipe(sass({
           'include css': true
         })) //Скомпилируем scss
-        .pipe(postcss(processorsVendor)) //расставим префиксы и сожмем
+        .pipe(postcss(processorsVendor)) //обработаем postcss
+        .pipe(cssnano()) //сожмем
         .pipe(sourcemaps.write('.')) //пропишем sourcemap
         .pipe(gulp.dest(path.build.css)) //выгрузим в build
         .pipe(connect.reload()); //перезагрузим сервер

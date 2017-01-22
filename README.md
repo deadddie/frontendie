@@ -17,6 +17,7 @@
 * rimraf - очистка
 * gulp-sourcemaps - sourcemaps
 * gulp-sass - поддержка sass/scss
+* gulp-cssnano - минификация css
 * gulp-rename - переименование файлов
 * gulp-plumber - предохранитель для остановки gulp
 * gulp-watch - расширение возможностей watch
@@ -25,5 +26,4 @@
 
 #### PostCSS-плагины
 
-* postcss-cssnext - префиксы
-* cssnano - минификация
+* postcss-cssnext - префиксы и пр.

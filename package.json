@@ -34,6 +34,6 @@
     "gulp-sass": "latest",
     "gulp-postcss": "latest",
     "postcss-cssnext": "latest",
-    "cssnano": "latest"
+    "gulp-cssnano": "latest"
   }
 }
